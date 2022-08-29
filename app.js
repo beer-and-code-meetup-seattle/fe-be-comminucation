@@ -10,7 +10,7 @@ app.use(express.static('public'))
 // parse things as json
 app.use(express.json())
 
-// what our message currently is, reses back to this default whenever the
+// what our message currently is, resets back to this default whenever the
 // server is restarted
 var message = 'Enter a message below';
 
