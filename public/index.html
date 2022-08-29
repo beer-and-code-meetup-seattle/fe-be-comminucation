@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+  <script>
+    // as soon as the page is loaded:
+    //  - issue a request in the background to get the current message
+    fetch('http://localhost:3000/message')
+      // - at some point later, when the response comes, convert it to plain text
+      .then((response) => response.text())
+      // - once all the text has arrived, get the element with `id="message"`
+      //   and set its text to the most up to date message from server
+      .then((text) => document.getElementById('message').textContent = `The message is: '${text}.'`)
+
+    // when the button is clicked:
+    function onButtonClick() {
+      // - find the HTML element that is tagged with `id="message_input"`
+      var input_element = document.getElementById('message_input');
+      // - extract the value from the input
+      var user_supplied_message = input_element.value;
+      // - if the value wasn't empty,
+      //   (this prevents a blank input from clearing the message)
+      if (user_supplied_message) {
+        // - send a POST request to the server, notifying it of a new message
+        fetch('http://localhost:3000/message', {
+            method: 'POST',
+            // - tell the server that we're sending JSON
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            // - include our message, encoded as JSON
+            body: JSON.stringify({message: user_supplied_message})
+          })
+          // - at some point later, when the response comes, convert it to plain text
+          .then((response) => response.text())
+          // - once all the text has arrived, get the element with `id="message"`
+          //   and set its text to the most up to date message from server
+          .then((text) => document.getElementById('message').textContent = `The message is: '${text}'.`)
+      }
+    }
+  </script>
+
+  <p id="message">The message is: ''.</p>
+
+  <input id="message_input" type='text' />
+
+  <!-- when a user clicks this button, the javascript function `onButtonClick` is called -->
+  <button type="button" onClick="onButtonClick()">Set Message</button>
+
+</body>
+</html>
